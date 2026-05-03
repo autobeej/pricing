@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pricing &amp; Positioning — Founding Plan</title>
+<style>
+  :root {
+    --ink: #1a1f2e;
+    --muted: #5b6478;
+    --line: #e6e9ef;
+    --accent: #0f7a4f;
+    --accent-soft: #e8f4ee;
+    --bg: #fdfdfb;
+    --surface: #ffffff;
+    --warn: #b15a00;
+    --warn-soft: #fdf3e6;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 64px 48px 96px;
+  }
+
+  header.cover {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 36px;
+    margin-bottom: 48px;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .lede {
+    font-size: 18px;
+    color: var(--muted);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  .meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .meta strong { color: var(--ink); }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 56px 0 16px;
+    letter-spacing: -0.01em;
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+  }
+
+  h2:first-of-type { border-top: none; padding-top: 0; }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 28px 0 8px;
+  }
+
+  p, li { color: var(--ink); }
+
+  p { margin: 12px 0; }
+
+  ul, ol { margin: 12px 0; padding-left: 22px; }
+
+  li { margin: 6px 0; }
+
+  strong { font-weight: 600; }
+
+  .note {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+
+  .warn {
+    background: var(--warn-soft);
+    border-left: 3px solid var(--warn);
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--surface);
+    font-weight: 600;
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td.price {
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .package-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .package {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px 24px;
+    background: var(--surface);
+  }
+
+  .package-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .package-name {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .package-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .package-fit {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+  }
+
+  .checklist li::marker { content: "✓  "; color: var(--accent); font-weight: 700; }
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { padding-left: 24px; position: relative; }
+  .checklist li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    position: absolute;
+    left: 0;
+  }
+
+  .objection {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 10px 0;
+    background: var(--surface);
+  }
+
+  .objection .q {
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .objection .a {
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .step-body strong { display: block; margin-bottom: 2px; }
+  .step-body p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { padding: 24px 0; max-width: 100%; }
+    h2 { break-before: avoid; page-break-inside: avoid; }
+    .package, .objection, table { break-inside: avoid; page-break-inside: avoid; }
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 32px 20px 64px; }
+    h1 { font-size: 30px; }
+    .meta { flex-direction: column; gap: 6px; }
+    table { font-size: 13px; }
+    th, td { padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="cover">
+  <div class="eyebrow">Founding plan · Draft 1</div>
+  <h1>Pricing &amp; Positioning</h1>
+  <p class="lede">A two-person AI-native web &amp; consulting shop. This document defines our pricing model, packaged offerings, sales playbook, and the first 90 days of operation.</p>
+  <div class="meta">
+    <span><strong>Drafted:</strong> May 2026</span>
+    <span><strong>Status:</strong> Internal review</span>
+    <span><strong>Owners:</strong> Builder &amp; Sales partner</span>
+  </div>
+</header>
+
+<h2>TL;DR</h2>
+<p>We sell <strong>productized fixed-price builds</strong> with a <strong>mandatory monthly retainer</strong> attached, gated by a <strong>paid Discovery Sprint</strong>. We do not bill clients hourly — our AI tooling lets us deliver in a fraction of the time, and hourly billing would punish us for our own efficiency. We capture that margin internally.</p>
+<p>Year 1 looks like a fast-moving productized speed shop. Year 3 looks like an embedded fractional AI/digital team for 4–6 mid-market clients on retainer. The path between them is a discipline of saying no to bad revenue.</p>
+
+<h2>The Model</h2>
+<p><strong>Hybrid: fixed productized build + mandatory monthly retainer + paid Discovery Sprint as the sales gate.</strong> Three things, every engagement, every time.</p>
+<ul class="checklist">
+  <li><strong>Productized build</strong> — three off-the-shelf packages cover 80% of inbound. Custom work starts at $20k+ and is preceded by Discovery.</li>
+  <li><strong>Mandatory retainer</strong> — every build ships with a monthly maintenance contract. If they refuse, we refuse the build.</li>
+  <li><strong>Paid Discovery</strong> — anything over $15k starts with a $1.5k–$3k two-week scoping engagement. Credited 100% if they proceed.</li>
+</ul>
+
+<h2>Year 1 Packages</h2>
+<p>Default menu. Cousin sells from these one-pagers; they cover the live pipeline today.</p>
+
+<div class="package-grid">
+
+  <div class="package">
+    <div class="package-head">
+      <div class="package-name">Foundation Site</div>
+      <div class="package-price">$7,500</div>
+    </div>
+    <div>Modern marketing or CMS site (Next.js + Vercel + Tailwind), Stripe integration, Google Workspace tooling, basic SEO. <strong>2-week delivery.</strong></div>
+    <div class="package-fit"><strong>Best fit:</strong> Sweet Spot Guide Service · South Shore Ski Club · Divinity Salon</div>
+  </div>
+
+  <div class="package">
+    <div class="package-head">
+      <div class="package-name">Foundation + Engagement Engine</div>
+      <div class="package-price">$12,500</div>
+    </div>
+    <div>Foundation Site plus automated email/newsletter flows, booking or signup form with payment, and one lightweight AI integration (FAQ chatbot, intake summarizer, automated newsletter generator).</div>
+    <div class="package-fit"><strong>Best fit:</strong> Sheldon Water Polo (already shipping) · Eugene City WP · Willamette HS WP · sports nonprofit replications</div>
+  </div>
+
+  <div class="package">
+    <div class="package-head">
+      <div class="package-name">AI Workflow Build</div>
+      <div class="package-price">$20,000–$30,000</div>
+    </div>
+    <div>RAG internal knowledge base or agentic automation (booking concierge, customer-support agent, ops automation), full data pipeline, hallucination guardrails, monitoring dashboard. <strong>Discovery Sprint required.</strong></div>
+    <div class="package-fit"><strong>Best fit:</strong> Hatshe (commerce assistant) · guide service automation · mid-tier retailer ops</div>
+  </div>
+
+</div>
+
+<div class="note">
+  <strong>Always present three tiers.</strong> Anchor (most expensive option), Target (what we want them to buy), Decoy (stripped-down version). Never quote a single price — it forces a yes/no decision and invites haggling.
+</div>
+
+<h2>Retainers (mandatory on every build)</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tier</th>
+      <th>Price/month</th>
+      <th>Includes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Care</strong> <em>(default)</em></td>
+      <td class="price">$500</td>
+      <td>Hosting, security patches, uptime monitoring, 1 hour of small edits</td>
+    </tr>
+    <tr>
+      <td><strong>Growth</strong></td>
+      <td class="price">$2,500</td>
+      <td>Care + monthly content/feature updates, A/B tests, conversion optimization, light AI tuning</td>
+    </tr>
+    <tr>
+      <td><strong>AI Ops</strong></td>
+      <td class="price">$3,500–$6,000</td>
+      <td>Growth + prompt refinement, model migrations, vector DB hosting, hallucination monitoring, monthly performance review</td>
+    </tr>
+    <tr>
+      <td><strong>Fractional CTO</strong> <em>(Year 2+)</em></td>
+      <td class="price">$8,000–$12,000</td>
+      <td>Embedded 1–2 days/week, roadmap ownership, executive reporting</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="warn">
+  <strong>Hard rule:</strong> If a Foundation client refuses the Care retainer, we walk. The retainer <em>is</em> the business. The build is a loss-leader to acquire it.
+</div>
+
+<h2>Discovery Sprint</h2>
+<p><strong>$1,500–$3,000, 1–2 weeks. Required for any project ≥ $15k.</strong></p>
+<p>Deliverables:</p>
+<ul class="checklist">
+  <li>Technical scope document with explicit "will / won't do" perimeter</li>
+  <li>Data readiness assessment</li>
+  <li>ROI projection</li>
+  <li>Fixed-price implementation quote</li>
+</ul>
+<p><strong>Credited 100% toward the build if they proceed.</strong> This is our scope-creep insurance and our free-consulting killer. If they won't pay $1,500 to plan, they won't honor a $20,000 quote — we want to qualify them out at the cheapest possible step.</p>
+
+<h2>Payment Terms — 40 / 40 / 20</h2>
+<p>Not 50/50. Clients stall the launch and we starve.</p>
+<table>
+  <tbody>
+    <tr><td><strong>40%</strong></td><td>On contract signing</td></tr>
+    <tr><td><strong>40%</strong></td><td>On MVP delivery to staging environment</td></tr>
+    <tr><td><strong>20%</strong></td><td>On launch <em>OR</em> 30 days after MVP delivery, whichever first</td></tr>
+  </tbody>
+</table>
+<p>The "30 days after MVP" clause is the load-bearing piece. It guarantees we're paid for technical labor even if the client indefinitely stalls the public launch.</p>
+
+<h2>Contract Stack (non-negotiable)</h2>
+<ol>
+  <li><strong>Scope perimeter</strong> — explicit "what the AI will and won't do." Anything outside requires a Change Order at a $500 minimum.</li>
+  <li><strong>AI Addendum</strong> — IP carve-out: client owns final outputs; we and our vendors retain underlying models, prompts, and tooling.</li>
+  <li><strong>No-Training clause</strong> — guarantees client data is not used to train public foundational models. Enterprise API tiers only.</li>
+  <li><strong>Hallucination liability shift</strong> — outputs delivered "as-is," human-in-the-loop required for consequential decisions.</li>
+  <li><strong>Pass-through cost clause</strong> — token, compute, hosting costs billed at provider rate, no markup, no risk to us.</li>
+  <li><strong>Change Order template</strong> — flat $500 minimum so small asks become real revenue.</li>
+</ol>
+<p>One-time investment: ~$2,000–$3,000 with a contracts attorney to draft a master services agreement we reuse forever.</p>
+
+<h2>Sales Playbook</h2>
+<p>For when these come up on calls.</p>
+
+<div class="objection">
+  <div class="q">"Just give us a quick quote."</div>
+  <div class="a">"We don't quote without a Discovery Sprint. $1,500, two weeks, fully credited if you build with us. It's how we make sure the project is right for both sides."</div>
+</div>
+
+<div class="objection">
+  <div class="q">"AI is just an API call — this should be cheaper."</div>
+  <div class="a">"API access is the last 5%. The work is data preparation, prompt engineering, integration, guardrails, and monitoring. Want to see the breakdown?"</div>
+</div>
+
+<div class="objection">
+  <div class="q">"Can you do it for $X?" <em>(below floor)</em></div>
+  <div class="a">Offer the next tier down — Foundation as a templated build — or walk. Never discount the AI Workflow package; commoditizing it kills the entire premium positioning.</div>
+</div>
+
+<div class="objection">
+  <div class="q">"We don't want a retainer."</div>
+  <div class="a">"Then we're not the right fit for the build either. We can recommend a freelancer marketplace if you'd like." <em>(Mean it. Walk.)</em></div>
+</div>
+
+<div class="objection">
+  <div class="q">"Can we do 50% on completion?"</div>
+  <div class="a">"We do 40/40/20 — protects you with clear milestones and protects us from stalled launches. It's how every client of ours pays."</div>
+</div>
+
+<h2>Pipeline Mapping</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Lead</th>
+      <th>Right package</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Sheldon Water Polo</td>
+      <td>Foundation + Engagement Engine ($12.5k equivalent) — currently below floor</td>
+      <td>Treat as portfolio + reference. Ship a polished case study with hard numbers.</td>
+    </tr>
+    <tr>
+      <td>Sweet Spot Guide Service</td>
+      <td>Foundation $7,500 + $500/mo Care</td>
+      <td>Quote after Discovery Sprint</td>
+    </tr>
+    <tr>
+      <td>Hatshe</td>
+      <td>AI Workflow Build $20k–$30k (commerce automation or RAG product assistant)</td>
+      <td>Lead with a $2k Discovery — they have an existing site, the upside is clear</td>
+    </tr>
+    <tr>
+      <td>South Shore Ski Club</td>
+      <td>Foundation $7,500 + $500/mo Care</td>
+      <td>Standard Foundation pitch</td>
+    </tr>
+    <tr>
+      <td>Battle of the Bay Derby</td>
+      <td>Foundation $7,500</td>
+      <td>Low priority — re-engage when their CC issue is resolved</td>
+    </tr>
+    <tr>
+      <td>Divinity Salon</td>
+      <td>Foundation $7,500 + $500/mo Care</td>
+      <td>Standard Foundation pitch. AI booking concierge is a Year 2 upsell.</td>
+    </tr>
+    <tr>
+      <td>Eugene City WP / Willamette HS WP</td>
+      <td>Foundation + Engagement Engine $12,500 each</td>
+      <td>Reuse the Sheldon work. Sell at full price — Sheldon was the build cost we already absorbed.</td>
+    </tr>
+    <tr>
+      <td>Liz Gill / Gillmore Ad Agency</td>
+      <td>Channel partner, not direct sale</td>
+      <td>Structure a 10–15% referral commission. Engage after we have 3 case studies shipped.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Year 1 → Year 3 Evolution</h2>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Year 1</th>
+      <th>Year 2</th>
+      <th>Year 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Project floor</strong></td>
+      <td>$7,500</td>
+      <td>$15,000</td>
+      <td>$35,000+</td>
+    </tr>
+    <tr>
+      <td><strong>MRR target</strong></td>
+      <td>25%</td>
+      <td>40–50%</td>
+      <td>60%+</td>
+    </tr>
+    <tr>
+      <td><strong>Volume</strong></td>
+      <td>12–18 builds</td>
+      <td>~10 builds + retainer growth</td>
+      <td>4–6 deep accounts</td>
+    </tr>
+    <tr>
+      <td><strong>Positioning</strong></td>
+      <td>Productized speed shop</td>
+      <td>Value-based mid-tier</td>
+      <td>Embedded fractional team</td>
+    </tr>
+    <tr>
+      <td><strong>Primary revenue</strong></td>
+      <td>Build fees</td>
+      <td>Build fees + Growth retainers</td>
+      <td>Fractional CTO retainers</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Things to Pressure-Test</h2>
+<ul>
+  <li><strong>The $7,500 Year 1 floor</strong> — defensible in PNW SMB. May be too high for the earliest cousin-sourced leads. If we close 3 deals at $7.5k in month 1, hold. If 6 at $5k is more realistic, the lower floor wins on cash flow alone. Re-evaluate at month 2.</li>
+  <li><strong>Foundation pricing outside PNW</strong> — if cousin closes leads outside the region, we may price-shop against $2k template shops. Productization differentiators (speed guarantee, AI bundled, design system) need to hold the price.</li>
+  <li><strong>Hosting lock-in tactic</strong> — running client AI on our Vercel/Supabase to enforce a buyout fee is profitable but ethically grey for nonprofits. Decide our policy before the first contract.</li>
+  <li><strong>The "no retainer = no build" rule</strong> — it's the right rule, but be prepared to apply it. The first time a $7,500 client says no, we have to actually walk. That sets the tone for the next 50 deals.</li>
+</ul>
+
+<h2>First 5 Things to Do This Week</h2>
+
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-body">
+    <strong>Lock the package list.</strong>
+    <p>Confirm the three packages above (or our refinement). Cousin needs a one-pager per package to sell from.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-body">
+    <strong>Build the Discovery Sprint deliverable template.</strong>
+    <p>Two-page max: scope, data assessment, ROI projection, fixed quote. Reusable for every prospect.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">3</div>
+  <div class="step-body">
+    <strong>Engage a contracts attorney.</strong>
+    <p>Send the 6-clause stack. Budget $2k–$3k. One-time spend; reuse forever.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">4</div>
+  <div class="step-body">
+    <strong>Productize the Sports Nonprofit Engagement Engine.</strong>
+    <p>We're already building it for Sheldon. Define it as a $12,500 package and pitch Eugene City WP and Willamette HS WP as paid replications.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">5</div>
+  <div class="step-body">
+    <strong>Draft the Sheldon case study.</strong>
+    <p>Hard numbers: registrations processed, donations captured, calendar integrations live, hours saved versus manual. This is Exhibit A in every Foundation+Engagement Engine proposal for the next year.</p>
+  </div>
+</div>
+
+<footer>
+  Internal draft · Pricing &amp; Positioning Plan · v1
+</footer>
+
+</div>
+</body>
+</html>
