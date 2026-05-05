@@ -318,7 +318,7 @@
 <div class="page">
 
 <header class="cover">
-  <div class="eyebrow">Founding plan · Draft 13</div>
+  <div class="eyebrow">Founding plan · Draft 14</div>
   <h1>Pricing &amp; Positioning</h1>
   <p class="lede">A two-person AI-native vertical SaaS company, with premium custom services as a stretch tier for clients beyond the productized fit. This document defines our pricing, sales playbook, and the first 90 days.</p>
   <div class="meta">
@@ -863,18 +863,18 @@
       label.textContent = 'Generating PDF…';
       var element = document.querySelector('.page');
       var opts = {
-        margin: [12, 12, 14, 12],
+        margin: 0.5,
         filename: 'pricing-positioning-plan.pdf',
-        image: { type: 'jpeg', quality: 0.96 },
+        image: { type: 'jpeg', quality: 0.95 },
         html2canvas: {
-          scale: 2,
+          scale: 1.5,
           useCORS: true,
           logging: false,
           backgroundColor: '#fdfdfb',
-          windowWidth: 900
+          letterRendering: true
         },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-        pagebreak: { mode: ['css', 'legacy'], avoid: ['.package', '.objection', 'table', 'tr', '.note', '.warn', '.step'] }
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'] }
       };
       return window.html2pdf().set(opts).from(element).save();
     }).then(function () {
