@@ -3,14 +3,510 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="refresh" content="0; url=/receptionist" />
-<title>Redirecting…</title>
+<title>AI Receptionist — Internal Brief</title>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; margin: 0; padding: 64px 24px; background: #fdfdfb; color: #1a1f2e; text-align: center; }
-  a { color: #0f7a4f; }
+  :root {
+    --ink: #1a1f2e;
+    --muted: #5b6478;
+    --line: #e6e9ef;
+    --accent: #0f7a4f;
+    --accent-soft: #e8f4ee;
+    --bg: #fdfdfb;
+    --surface: #ffffff;
+    --warn: #b15a00;
+    --warn-soft: #fdf3e6;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 820px; margin: 0 auto; padding: 64px 48px 96px; }
+
+  header.cover { border-bottom: 1px solid var(--line); padding-bottom: 36px; margin-bottom: 48px; }
+
+  .eyebrow {
+    text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px;
+    font-weight: 600; color: var(--accent); margin-bottom: 12px;
+  }
+
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 12px; line-height: 1.15; letter-spacing: -0.01em; }
+
+  .lede { font-size: 18px; color: var(--muted); margin: 0; max-width: 60ch; }
+
+  .meta { display: flex; gap: 24px; margin-top: 24px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+  .meta strong { color: var(--ink); }
+
+  .back-link {
+    display: inline-block; margin-bottom: 16px; font-size: 13px;
+    color: var(--muted); text-decoration: none; font-weight: 500;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  h2 {
+    font-size: 22px; font-weight: 700; margin: 56px 0 16px; letter-spacing: -0.01em;
+    border-top: 1px solid var(--line); padding-top: 32px;
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+
+  h3 { font-size: 17px; font-weight: 700; margin: 28px 0 8px; }
+
+  p, li { color: var(--ink); }
+  p { margin: 12px 0; }
+  ul, ol { margin: 12px 0; padding-left: 22px; }
+  li { margin: 6px 0; }
+  strong { font-weight: 600; }
+
+  .note {
+    background: var(--accent-soft); border-left: 3px solid var(--accent);
+    padding: 14px 18px; border-radius: 4px; margin: 20px 0; font-size: 15px;
+  }
+  .warn {
+    background: var(--warn-soft); border-left: 3px solid var(--warn);
+    padding: 14px 18px; border-radius: 4px; margin: 20px 0; font-size: 15px;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th {
+    background: var(--surface); font-weight: 600; color: var(--ink);
+    border-bottom: 2px solid var(--ink); font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  td.price { font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+  .package-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin: 20px 0; }
+
+  .package { border: 1px solid var(--line); border-radius: 8px; padding: 22px 24px; background: var(--surface); }
+
+  .package-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .package-name { font-size: 17px; font-weight: 700; }
+  .package-price { font-size: 18px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+  .package-fit {
+    font-size: 13px; color: var(--muted); margin-top: 12px;
+    border-top: 1px solid var(--line); padding-top: 10px;
+  }
+
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { padding-left: 24px; position: relative; }
+  .checklist li::before { content: "✓"; color: var(--accent); font-weight: 700; position: absolute; left: 0; }
+
+  .step { display: flex; align-items: flex-start; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: white; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+  }
+  .step-body strong { display: block; margin-bottom: 2px; }
+  .step-body p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .pitch-block {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 24px 28px; margin: 16px 0;
+  }
+  .pitch-block .label {
+    text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em;
+    font-weight: 700; color: var(--muted); margin-bottom: 8px;
+  }
+  .pitch-headline { font-size: 28px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; margin: 4px 0 12px; }
+  .pitch-sub { font-size: 17px; color: var(--muted); margin: 0; }
+
+  .stat-card { background: var(--ink); color: white; padding: 24px 28px; border-radius: 10px; margin: 16px 0; }
+  .stat-card .big { font-size: 36px; font-weight: 800; color: white; line-height: 1; margin-bottom: 6px; }
+  .stat-card .lbl { font-size: 14px; color: rgba(255,255,255,0.75); }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; text-align: center; }
+
+  .print-button {
+    position: fixed; top: 20px; right: 20px; z-index: 100;
+    background: var(--accent); color: white; border: none;
+    padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px;
+    font-family: inherit; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .print-button:hover {
+    background: #0a5a3a; transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+  }
+  .print-button svg { width: 14px; height: 14px; }
+
+  @media print {
+    body { background: white; }
+    .page { padding: 24px 0; max-width: 100%; }
+    h2 { break-before: avoid; page-break-inside: avoid; }
+    table, .pitch-block, .stat-card, .step, .package { break-inside: avoid; page-break-inside: avoid; }
+    .print-button { display: none !important; }
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 32px 20px 64px; }
+    h1 { font-size: 30px; }
+    .meta { flex-direction: column; gap: 6px; }
+    table { font-size: 13px; }
+    th, td { padding: 10px 8px; }
+    .print-button { top: 12px; right: 12px; padding: 8px 14px; font-size: 12px; }
+    .pitch-headline { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
-<p>This brief has moved. Redirecting to <a href="/receptionist">/receptionist</a>…</p>
+<button type="button" class="print-button" id="pdfButton" aria-label="Download as PDF">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  <span id="pdfButtonLabel">Download PDF</span>
+</button>
+<div class="page">
+
+<header class="cover">
+  <a href="/" class="back-link">← Back to founding plan</a>
+  <div class="eyebrow">Internal brief · DRAFT <span style="text-transform:none">v</span>0.2</div>
+  <h1>AI Receptionist — Combined Flagship Brief</h1>
+  <p class="lede">A single product across two channels — an embeddable AI chat widget on the customer's website plus automatic missed-call text-back on their phone line. Both powered by the same managed RAG knowledge base. Voice AI deferred for a later release. This brief consolidates the AI chat widget research and the AI receptionist research into one offer for partner discussion.</p>
+  <div class="meta">
+    <span><strong>Drafted:</strong> May 2026</span>
+    <span><strong>Status:</strong> Internal review</span>
+    <span><strong>Decision needed:</strong> Pricing anchor + vertical commitment</span>
+  </div>
+</header>
+
+<h2>TL;DR</h2>
+<p>One product, two channels, one knowledge base. Web visitors get the AI chat widget; phone callers who hit voicemail get an AI text conversation within 30 seconds. The customer brings their content — services, pricing, hours, FAQs — and we install, tune, and run both channels as a managed monthly subscription.</p>
+<p>Three independent research agents converged on this category as the right flagship: visceral, dollar-quantified pain (especially for service businesses), large unmet demand, ~24-month defensibility window. The strategic catch is that the strongest target vertical (home-services trades) is not in our existing warm pipeline. <strong>Voice AI is intentionally out of scope for v1</strong> — chat + SMS-text-back covers the highest-ROI channels at much better margins, and we add voice as a Pro+ upgrade once the core product is selling.</p>
+
+<h2>The Product</h2>
+<p>One unified AI agent, deployed across two channels:</p>
+<ol>
+  <li><strong>Web chat widget.</strong> One-line script tag drops onto any existing website. Visitors chat with the AI; it answers questions, captures leads, books meetings, escalates to a human when needed.</li>
+  <li><strong>Missed-call text-back.</strong> When a phone call goes to voicemail, the AI sends an SMS within 30 seconds and starts a real two-way conversation. Customers who'd otherwise have called the next vendor stay engaged.</li>
+</ol>
+<p>The same RAG knowledge base powers both — customer uploads docs (PDFs, Google Docs), pastes their FAQ, or we crawl their existing site. The same configurable agent personality runs across web and SMS so the customer's brand voice is consistent everywhere.</p>
+
+<p><strong>What we sell vs. what's commoditized:</strong> the underlying widget infra, LLM APIs, and SMS routing are all commoditized building blocks. Our offer is the <em>install and tune and manage</em> layer — we ingest the knowledge, write the system prompt, calibrate tone, wire up lead routing, and keep it working. That service layer is what justifies the price band.</p>
+
+<h2>Why this offer (research convergence)</h2>
+<p>Three parallel research agents from different angles independently picked this category:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Research lens</th>
+      <th>Recommendation</th>
+      <th>Pricing signal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Demand &amp; willingness-to-pay</td>
+      <td>"Never Miss Another Call" for service businesses</td>
+      <td class="price">$1,500 setup + $497/mo (with voice)</td>
+    </tr>
+    <tr>
+      <td>Speed-to-value</td>
+      <td>Missed-call text-back, then expand to chat + voice</td>
+      <td class="price">$497 setup + $297/mo (with voice)</td>
+    </tr>
+    <tr>
+      <td>Whitespace &amp; defensibility</td>
+      <td>Vertical-locked AI receptionist + booking + CRM</td>
+      <td class="price">$2,500–$5,000 install + $500–$1,200/mo (with voice)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The agents priced higher because they assumed voice AI was included (which carries $150–$300/mo in voice-infra costs). <strong>By dropping voice from v1, we cut cost-to-serve by 60–80% and can price the chat + SMS bundle aggressively below the agents' anchors</strong> while still keeping healthy margins.</p>
+
+<h2>The three tiers</h2>
+<p>Customers self-select on which channels they need and how much volume they expect. <strong>Most pick Standard.</strong> Hook is the foot-in-the-door for prospects who only want web chat; Pro is for higher-volume operators or businesses with custom integration needs.</p>
+
+<div class="package-grid">
+
+  <div class="package">
+    <div class="package-head">
+      <div class="package-name">Hook — Web chat only</div>
+      <div class="package-price">$49/mo</div>
+    </div>
+    <div><strong>The lowest-friction entry.</strong> AI chat widget on the customer's existing site, one agent personality, one knowledge source, basic email lead capture, 100 conversations/month, our 1-hour install.</div>
+    <div class="package-fit"><strong>Setup:</strong> $199 · <strong>Best for:</strong> small businesses with a website but no phone-call volume; brand-new operators dipping into AI</div>
+  </div>
+
+  <div class="package">
+    <div class="package-head">
+      <div class="package-name">Standard — Chat + Missed-Call SMS <em>· recommended</em></div>
+      <div class="package-price">$149/mo</div>
+    </div>
+    <div><strong>Everything in Hook, plus the missed-call channel:</strong> automatic SMS text-back within 30 seconds when a call goes to voicemail, multi-step SMS conversation, calendar integration (Google / ServiceTitan / Jobber / Housecall Pro), lead-routing rules, 300 conversations/month total, monthly knowledge-base refresh.</div>
+    <div class="package-fit"><strong>Setup:</strong> $499 · <strong>Best for:</strong> service businesses where missed calls = lost revenue (the bulk of the home-services audience)</div>
+  </div>
+
+  <div class="package">
+    <div class="package-head">
+      <div class="package-name">Pro — Chat + SMS + Advanced</div>
+      <div class="package-price">$299/mo</div>
+    </div>
+    <div><strong>Everything in Standard, plus advanced features:</strong> multi-agent personalities (e.g., support + sales separately), custom CRM/ticketing integrations, "unlimited within reason" conversations (soft cap 1,500/mo, overage $0.05/conversation), priority support (24-hour response), quarterly tuning sessions.</div>
+    <div class="package-fit"><strong>Setup:</strong> $999 · <strong>Best for:</strong> growing businesses where the agent is a real revenue lever, not just a help desk</div>
+  </div>
+
+</div>
+
+<div class="note">
+  <strong>Voice AI roadmap.</strong> True voice receptionist (the AI answers ringing calls, not just texts back missed ones) is the natural next-tier upgrade. Once the core product is selling, "Pro+ Voice" likely lands at $499–$799/mo with a $1,500 setup. Defer until we have 10+ paying chat/SMS customers and validated install repeatability.
+</div>
+
+<h3>What every tier includes</h3>
+<ul class="checklist">
+  <li>Custom-branded chat widget using the customer's logo, colors, greeting</li>
+  <li>One-hour professional install on the customer's existing site</li>
+  <li>Knowledge base ingestion — we extract from PDFs, Google Docs, sitemaps, or pasted content</li>
+  <li>Hosted infrastructure (we manage tokens, hosting, monitoring)</li>
+  <li>GDPR-aware logging and conversation transcripts</li>
+  <li>Monthly maintenance, security patches, uptime monitoring</li>
+  <li>Knowledge base updates (cadence varies by tier)</li>
+</ul>
+<p>Customer brings their own brand assets (logo, colors). If they don't have those, sourcing is outside scope.</p>
+
+<h3>One-off add-ons (background option)</h3>
+<table>
+  <thead>
+    <tr><th>Add-on</th><th>Type</th><th>Price</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Additional knowledge source beyond tier</td><td>One-time</td><td class="price">+$100</td></tr>
+    <tr><td>Custom integration (CRM, calendar, ticketing — per)</td><td>One-time</td><td class="price">+$300–$500</td></tr>
+    <tr><td>Additional agent persona</td><td>One-time</td><td class="price">+$200</td></tr>
+    <tr><td>Branded widget customization beyond defaults</td><td>One-time</td><td class="price">+$250</td></tr>
+    <tr><td>Extra 100 conversations/month</td><td>Recurring</td><td class="price">+$25/mo</td></tr>
+    <tr><td>Heavy customization / weekly tuning</td><td>Recurring</td><td class="price">+$100/mo</td></tr>
+  </tbody>
+</table>
+
+<h2>Cost-to-serve reality check</h2>
+<p>Margins are healthy without voice. At Standard tier (the recommended anchor):</p>
+<ul>
+  <li><strong>LLM tokens (Claude Haiku / GPT-4o-mini):</strong> ~$5/mo per customer at 300 conversations</li>
+  <li><strong>SMS via Twilio (A2P 10DLC):</strong> ~$15/mo per customer (assumes 50 missed-call texts × multi-message conversations)</li>
+  <li><strong>A2P 10DLC carrier fees:</strong> ~$2/mo per customer</li>
+  <li><strong>Hosting / infra overhead (amortized):</strong> ~$3/mo per customer</li>
+  <li><strong>Total cost-to-serve:</strong> ~$25/mo</li>
+  <li><strong>Gross margin at $149/mo:</strong> <strong>~83%</strong></li>
+</ul>
+<p>Hook is even better (~92%); Pro is ~85% with heavy usage. The unit economics are strong because we're staying out of voice-infra costs.</p>
+
+<h2>The strategic question — vertical commitment</h2>
+<p>The research recommended targeting home-services trades (plumbers, HVAC, electricians, roofers) because that's where missed-call pain is most visceral and most quantifiable. Our existing warm pipeline (water polo nonprofit, salon, ski club, guide service, retail brand) is mostly outside that vertical. Three paths:</p>
+
+<table>
+  <thead>
+    <tr><th>Path</th><th>Mechanic</th><th>Tradeoff</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>A. Full pivot to home services</strong></td>
+      <td>Cold outreach only — scrape PNW plumbing/HVAC numbers via Outscraper, run cold email + voicemail drops, route warm replies to the AI</td>
+      <td>Strongest market signal, sharpest pitch ($1,200/missed call). No warm leads, higher acquisition friction initially.</td>
+    </tr>
+    <tr>
+      <td><strong>B. Adapt to warm pipeline</strong></td>
+      <td>Pitch chat + missed-call text-back to existing leads (salon, guide service, ski club) where calls also matter</td>
+      <td>5–10× higher conversion on warm leads. Weaker pitch — pain isn't as visceral or as countable.</td>
+    </tr>
+    <tr>
+      <td><strong>C. Run both as parallel pilots</strong> <em>· recommended</em></td>
+      <td>5 cold pitches into home services + 5 warm pitches into existing pipeline. Compare conversion, deal size, install repeatability over 30 days.</td>
+      <td>Most data, most effort. The comparison is worth more than what it costs to run both.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>The Pitch (Draft) — what we'd actually tell customers</h2>
+
+<div class="pitch-block">
+  <div class="label">Hero</div>
+  <div class="pitch-headline">Never miss another call.</div>
+  <p class="pitch-sub">An AI receptionist for your website and your phone. It answers questions on your site, books meetings, and texts back the calls you can't pick up — installed in under two hours, no DIY, no fiddling.</p>
+</div>
+
+<div class="pitch-block">
+  <div class="label">Problem hook (for service-business audience)</div>
+  <p>Industry data: average revenue lost per missed call for plumbing/HVAC = <strong>$1,200</strong>. 42% of small service businesses lose $500+/week to voicemail. 27% of business calls go to voicemail; 57% of customers go with whoever responds first.</p>
+  <div class="stat-card">
+    <div class="big">$1,200</div>
+    <div class="lbl">average revenue lost per missed call for plumbing &amp; HVAC service businesses</div>
+  </div>
+</div>
+
+<h3>How it works (3 steps)</h3>
+
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-body">
+    <strong>Web visitors get an AI chat widget.</strong>
+    <p>Embedded on the customer's existing site. Answers questions about services, pricing, hours; captures leads; books meetings. Branded to their voice and look.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-body">
+    <strong>Missed phone calls get an instant text.</strong>
+    <p>Within 30 seconds of going to voicemail, the AI sends an SMS asking what the caller needs and starts a real conversation. Most "lost" leads are recovered before they call your competitor.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">3</div>
+  <div class="step-body">
+    <strong>Both channels feed your calendar and CRM.</strong>
+    <p>Confirmed bookings drop into Google Calendar / ServiceTitan / Jobber / Housecall Pro. Lead alerts hit your phone instantly. You walk into the day with the day already booked.</p>
+  </div>
+</div>
+
+<h3>Competitive framing</h3>
+<ul>
+  <li><strong>vs. Tidio / Crisp / Chatra ($19–$49/mo):</strong> they sell a self-installed widget; we install it, tune the agent on the customer's content, and run it as a service.</li>
+  <li><strong>vs. Intercom Fin ($0.99 per resolution + $75+/mo Intercom):</strong> we're flat-fee and predictable; Intercom adds up fast at any volume.</li>
+  <li><strong>vs. Chatbase / Voiceflow / build-your-own ($29–$399/mo):</strong> the customer does all the work themselves on those platforms. We do the work for them.</li>
+  <li><strong>vs. GoHighLevel-style missed-call text-back ($49–$199/mo):</strong> their text-back is a static auto-reply. Ours is a real two-way AI conversation that books the appointment.</li>
+  <li><strong>vs. Smith.ai / Ruby Receptionists ($300–$700/mo human-staffed):</strong> 50–80% cheaper, 24/7 with no scheduling gaps, no minimum-call commitment. We're not voice yet — that's coming — but for chat + SMS we're well below their floor.</li>
+</ul>
+
+<h2>Pressure-test items</h2>
+<ul>
+  <li><strong>A2P 10DLC SMS registration takes 3–5 days.</strong> Start the application before the first cold pitch — otherwise it blocks the first install and we look amateur.</li>
+  <li><strong>TCPA / cold-outreach legal exposure.</strong> Ringless voicemail and cold SMS have real liability under US TCPA. Review with an attorney before scraping any list — class-action territory if done wrong.</li>
+  <li><strong>Differentiation against free / freemium alternatives.</strong> "We install it for you" works against pure DIY tools but only persuades buyers who don't want to DIY. Lead the pitch with the install + tune + run service, not the widget itself.</li>
+  <li><strong>Install scaling.</strong> 1-hour install at customer #1 is fine; if it inflates to 4+ hours by customer #20, unit economics collapse. Codify the playbook into a checklist before customer #3.</li>
+  <li><strong>Token-model dependency.</strong> If Anthropic / OpenAI raise prices or deprecate cheap models, our 80%+ margin tightens. Stay model-agnostic in the backend.</li>
+  <li><strong>One bad demo can sink us.</strong> AI mistakes (wrong quote, bad scheduling, hallucinated services) are visible and embarrassing. Heavy testing on the first 3 customers is non-negotiable.</li>
+  <li><strong>ServiceTitan / Housecall Pro could ship native AI add-ons in 12–24 months.</strong> Monitor their roadmaps. Mitigation is to become an integration partner, not a competitor.</li>
+</ul>
+
+<h2>30-day pilot path</h2>
+
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-body">
+    <strong>Week 1 — Infrastructure setup.</strong>
+    <p>A2P 10DLC application (3–5 day blocker). Twilio account + SMS number. Codify the install playbook into a step-by-step checklist. Stand up a public-facing landing page at a sub-route.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-body">
+    <strong>Week 2 — Outreach (Path C: parallel).</strong>
+    <p>5 cold pitches into PNW home-services trades (scraped Outscraper list). 5 warm pitches into existing pipeline (Sweet Spot, Divinity, ski club, etc.). Same Standard tier offer, same money-back guarantee. Track which channel converts.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">3</div>
+  <div class="step-body">
+    <strong>Week 3 — First installs.</strong>
+    <p>Target 2–3 paying customers from the warm + cold mix. Run installs against the playbook. Time everything. Capture failure modes and edit the playbook in real time.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">4</div>
+  <div class="step-body">
+    <strong>Week 4 — Measure &amp; decide.</strong>
+    <p>Pull the pilot data: cold response rate, demo→close rate, install time per customer, gross margin, qualitative feedback. Decide: scale up which channel, adjust pricing, or kill.</p>
+  </div>
+</div>
+
+<h3>Kill criteria</h3>
+<p><strong>If we hit any of these by day 30, the offer is wrong as positioned and we pivot:</strong></p>
+<ul>
+  <li>Cold outreach reply rate below 1% (something is off about the pitch or the channel)</li>
+  <li>Demo→close rate below 10% on warm replies (price or product is wrong)</li>
+  <li>Install time exceeds 4 hours per customer (playbook isn't repeatable)</li>
+  <li>Gross margin below 60% on first 3 customers (cost-to-serve is too high at this price)</li>
+</ul>
+
+<h2>Decision points needing partner input</h2>
+<ol>
+  <li><strong>Pricing anchor:</strong> stick with $49 / $149 / $299 across the three tiers, or test a higher anchor for the home-services audience ($199 Standard, $399 Pro)?</li>
+  <li><strong>Vertical strategy:</strong> Path A (full home-services pivot), Path B (warm-pipeline only), or Path C (parallel pilots — recommended)?</li>
+  <li><strong>Brand commitment:</strong> launch under <code>maks.co</code> or stand up a separate domain for this vertical (e.g., <code>NeverMissACall.io</code>)?</li>
+  <li><strong>Cold-outreach legal review:</strong> who runs it, by when, before any list-drops?</li>
+  <li><strong>Voice AI timing:</strong> commit to v1 = chat + SMS only; voice arrives as a Pro+ tier no earlier than month 4. Agree?</li>
+  <li><strong>Founding plan integration:</strong> if this offer converts well, does it become the new flagship of the founding plan (replacing the $50/mo Starter SaaS tier in DRAFT v2.0), or stay parallel as a separate product line?</li>
+  <li><strong>Investment tolerance:</strong> ~$200–$500 on Twilio / scraping credits + ~40 hours focused work in the first month. Both signed off?</li>
+</ol>
+
+<h2>Future — Voice AI as a Pro+ tier</h2>
+<p>Once the chat + SMS product is selling, voice receptionist becomes the natural next-tier upgrade. The infra (Vapi / Retell / Synthflow + Twilio + same RAG) is straightforward to add; the commercial upside is high (the human-staffed receptionist incumbents charge $300–$700/mo). Likely positioning when we do launch it: <strong>Pro+ Voice at $499–$799/mo with a $1,500 setup</strong>. Triggers to start building voice: 10+ paying chat/SMS customers, install playbook stable, &lt;4 hours per install. Targets to hit before voice launch: 50% of Pro customers asking about voice unprompted.</p>
+
+<footer>
+  Internal brief · AI Receptionist (chat + SMS) · v0.2
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var btn = document.getElementById('pdfButton');
+  var label = document.getElementById('pdfButtonLabel');
+  var libLoaded = false;
+  var generating = false;
+
+  function loadLib() {
+    return new Promise(function (resolve, reject) {
+      if (libLoaded || window.html2pdf) { libLoaded = true; resolve(); return; }
+      var s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.3/html2pdf.bundle.min.js';
+      s.onload = function () { libLoaded = true; resolve(); };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  function generate() {
+    if (generating) return;
+    generating = true;
+    btn.disabled = true;
+    label.textContent = 'Preparing…';
+
+    loadLib().then(function () {
+      label.textContent = 'Generating PDF…';
+      var element = document.querySelector('.page');
+      var opts = {
+        margin: 0.5,
+        filename: 'ai-receptionist-brief.pdf',
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { scale: 1.5, useCORS: true, logging: false, backgroundColor: '#fdfdfb', letterRendering: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'] }
+      };
+      return window.html2pdf().set(opts).from(element).save();
+    }).then(function () {
+      label.textContent = 'Download PDF';
+      btn.disabled = false;
+      generating = false;
+    }).catch(function (err) {
+      console.error('PDF generation failed', err);
+      label.textContent = 'Try again';
+      btn.disabled = false;
+      generating = false;
+    });
+  }
+
+  btn.addEventListener('click', generate);
+})();
+</script>
+
 </body>
 </html>
