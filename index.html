@@ -311,14 +311,14 @@
 </style>
 </head>
 <body>
-<button type="button" class="print-button" onclick="window.print()" aria-label="Download as PDF">
+<button type="button" class="print-button" id="pdfButton" aria-label="Download as PDF">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-  Download PDF
+  <span id="pdfButtonLabel">Download PDF</span>
 </button>
 <div class="page">
 
 <header class="cover">
-  <div class="eyebrow">Founding plan · Draft 12</div>
+  <div class="eyebrow">Founding plan · Draft 13</div>
   <h1>Pricing &amp; Positioning</h1>
   <p class="lede">A two-person AI-native vertical SaaS company, with premium custom services as a stretch tier for clients beyond the productized fit. This document defines our pricing, sales playbook, and the first 90 days.</p>
   <div class="meta">
@@ -834,5 +834,64 @@
 </footer>
 
 </div>
+
+<script>
+(function () {
+  var btn = document.getElementById('pdfButton');
+  var label = document.getElementById('pdfButtonLabel');
+  var libLoaded = false;
+  var generating = false;
+
+  function loadLib() {
+    return new Promise(function (resolve, reject) {
+      if (libLoaded || window.html2pdf) { libLoaded = true; resolve(); return; }
+      var s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.3/html2pdf.bundle.min.js';
+      s.onload = function () { libLoaded = true; resolve(); };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  function generate() {
+    if (generating) return;
+    generating = true;
+    btn.disabled = true;
+    label.textContent = 'Preparing…';
+
+    loadLib().then(function () {
+      label.textContent = 'Generating PDF…';
+      var element = document.querySelector('.page');
+      var opts = {
+        margin: [12, 12, 14, 12],
+        filename: 'pricing-positioning-plan.pdf',
+        image: { type: 'jpeg', quality: 0.96 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#fdfdfb',
+          windowWidth: 900
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+        pagebreak: { mode: ['css', 'legacy'], avoid: ['.package', '.objection', 'table', 'tr', '.note', '.warn', '.step'] }
+      };
+      return window.html2pdf().set(opts).from(element).save();
+    }).then(function () {
+      label.textContent = 'Download PDF';
+      btn.disabled = false;
+      generating = false;
+    }).catch(function (err) {
+      console.error('PDF generation failed', err);
+      label.textContent = 'Try again';
+      btn.disabled = false;
+      generating = false;
+    });
+  }
+
+  btn.addEventListener('click', generate);
+})();
+</script>
+
 </body>
 </html>
